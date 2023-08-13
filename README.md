@@ -13,11 +13,16 @@ positional arguments:
 options:
   -h, --help  show this help message and exit
 ```
-After running the script check for the output file using xxd to see the result:
+
+1. If you want a vulnerable server, you can set it up from [here](https://github.com/jas9reet/heartbleed-lab "Heartbleed lab")
+2. Test for heartbleed vulnerability using nmap:
+```nmap -v -p8443 --script ssl-heartbleed $IP```
+
+3. Run the script:
+```
+python3 heartbleed.py $IP 8443
+```
+4. After running the script, check the output file using xxd to see the results:
 ```
 xxd response_data.bin
 ```
-Test for heartbleed vulnerability using nmap:
-```nmap -v -p443 --script ssl-heartbleed $IP```
-
-If you want a vulnerable server, you can set it up from [here](https://github.com/jas9reet/heartbleed-lab "Heartbleed lab") 
