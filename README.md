@@ -14,7 +14,7 @@ options:
   -h, --help  show this help message and exit
 ```
 
-1. If you want a vulnerable server, you can set it up from [here](https://github.com/jas9reet/heartbleed-lab "Heartbleed lab")
+1. If you want a vulnerable server to test, you can set it up from [here](https://github.com/jas9reet/heartbleed-lab "Heartbleed lab")
 2. Test for heartbleed vulnerability using nmap:
 ```nmap -v -p8443 --script ssl-heartbleed $IP```
 
