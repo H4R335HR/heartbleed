@@ -16,5 +16,5 @@ options:
 Test for heartbleed vulnerability using nmap:
 ```nmap -v -p443 --script ssl-heartbleed $IP```
 
-If you want a vulnerable server, you can set it up from [here]([https://www.google.com](https://github.com/jas9reet/heartbleed-lab)https://github.com/jas9reet/heartbleed-lab "Heartbleed lab") 
+If you want a vulnerable server, you can set it up from [here](https://www.google.com](https://github.com/jas9reet/heartbleed-lab) "Heartbleed lab") 
 [I'm an inline-style link with title](https://www.google.com "Google's Homepage")
