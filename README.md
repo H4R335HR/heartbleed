@@ -1,7 +1,8 @@
 # heartbleed
 A Heartbleed (CVE-2014-0160) PoC in Python 3
 
-```usage: heartbleed.py [-h] host [port]
+```
+usage: python heartbleed.py [-h] host [port]
 
 Heartbleed PoC
 
